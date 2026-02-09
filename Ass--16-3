@@ -1,0 +1,35 @@
+import java.sql.*;
+import java.util.Scanner;
+
+public class SalaryIncrement {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter department name: ");
+        String dept = sc.nextLine();
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            Connection con = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/mydb",
+                "root",
+                "password"
+            );
+
+            String updateQuery =
+                "UPDATE employee SET salary = salary * 1.10 WHERE department=?";
+
+            PreparedStatement ps = con.prepareStatement(updateQuery);
+            ps.setString(1, dept);
+
+            int rows = ps.executeUpdate();
+
+            System.out.println(rows + " employees salary updated");
+
+            con.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+}
