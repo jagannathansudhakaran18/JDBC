@@ -1,0 +1,78 @@
+import java.sql;
+
+// POJO Class
+class Student {
+    private int id;
+    private String name;
+    private int marks;
+
+    public Student(int id, String name, int marks) {
+        this.id = id;
+        this.name = name;
+        this.marks = marks;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getMarks() {
+        return marks;
+    }
+}
+
+// DAO Interface
+interface StudentDAO {
+    void addStudent(Student s);
+}
+
+// DAO Implementation using JDBC
+class StudentDAOImpl implements StudentDAO {
+
+    public void addStudent(Student s) {
+
+        try {
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            Connection con = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/mydb",
+                    "root",
+                    "virat18k");
+
+            String sql = "INSERT INTO student VALUES(?,?,?)";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setInt(1, s.getId());
+            ps.setString(2, s.getName());
+            ps.setInt(3, s.getMarks());
+
+            ps.executeUpdate();
+
+            System.out.println("Student inserted successfully");
+
+            con.close();
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+}
+
+// Main Class
+public class StudentDAOTest {
+
+    public static void main(String[] args) {
+
+        Student s = new Student(101, "Ravi", 85);
+
+        StudentDAO dao = new StudentDAOImpl();
+
+        dao.addStudent(s);
+    }
+}
