@@ -1,0 +1,6 @@
+<form action="EmployeeServlet" method="post">
+<input type="hidden" name="action" value="update">
+ID: <input type="text" name="id"><br>
+New Salary: <input type="text" name="salary"><br>
+<input type="submit" value="Update">
+</form>
