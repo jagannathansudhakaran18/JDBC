@@ -1,0 +1,67 @@
+<%@ page language="java" %>
+<html>
+<body>
+
+<h2>Student Registration</h2>
+
+<%
+String name = request.getParameter("name");
+String email = request.getParameter("email");
+String course = request.getParameter("course");
+String marksStr = request.getParameter("marks");
+
+String error = null;
+int marks = -1;
+
+if(marksStr != null){
+    try{
+        marks = Integer.parseInt(marksStr);
+
+        if(marks < 0 || marks > 100){
+            error = "Marks must be between 0 and 100";
+        }
+
+    }catch(Exception e){
+        error = "Marks must be a valid number";
+    }
+}
+
+if(marksStr == null || error != null){
+%>
+
+<form method="post">
+
+Name: <input type="text" name="name" required><br><br>
+
+Email: <input type="email" name="email" required><br><br>
+
+Course: <input type="text" name="course" required><br><br>
+
+Marks: <input type="number" name="marks" required><br><br>
+
+<input type="submit" value="Submit">
+
+</form>
+
+<%
+if(error != null){
+%>
+<p style="color:red"><%=error%></p>
+<%
+}
+}else{
+%>
+
+<h3>Student Details</h3>
+
+Name: <%=name%> <br><br>
+Email: <%=email%> <br><br>
+Course: <%=course%> <br><br>
+Marks: <%=marks%> <br><br>
+
+<%
+}
+%>
+
+</body>
+</html>
