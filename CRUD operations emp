@@ -118,39 +118,7 @@ public class EmployeeServlet extends HttpServlet {
         }
     }
 
-CREATE TABLE employee(
-id INT PRIMARY KEY,
-name VARCHAR(50),
-email VARCHAR(50),
-salary DOUBLE
-);
 
-
-//insert
-<form action="EmployeeServlet" method="post">
-<input type="hidden" name="action" value="insert">
-ID: <input type="text" name="id"><br>
-Name: <input type="text" name="name"><br>
-Email: <input type="text" name="email"><br>
-Salary: <input type="text" name="salary"><br>
-<input type="submit" value="Insert">
-</form>
-}
-
-//update
-<form action="EmployeeServlet" method="post">
-<input type="hidden" name="action" value="update">
-ID: <input type="text" name="id"><br>
-New Salary: <input type="text" name="salary"><br>
-<input type="submit" value="Update">
-</form>
-
-//delete
-<form action="EmployeeServlet" method="post">
-<input type="hidden" name="action" value="delete">
-Employee ID: <input type="text" name="id"><br>
-<input type="submit" value="Delete">
-</form>
 
 
 
