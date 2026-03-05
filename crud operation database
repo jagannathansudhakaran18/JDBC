@@ -1,0 +1,150 @@
+<%@ page import="java.sql.*" %>
+
+<%
+String action = request.getParameter("action");
+
+Class.forName("com.mysql.cj.jdbc.Driver");
+Connection con = DriverManager.getConnection(
+"jdbc:mysql://localhost:3306/mydb","root","virat@18k");
+
+/* DELETE */
+if("delete".equals(action)){
+    int id = Integer.parseInt(request.getParameter("id"));
+    PreparedStatement ps = con.prepareStatement(
+    "DELETE FROM Student WHERE id=?");
+    ps.setInt(1,id);
+    ps.executeUpdate();
+}
+
+/* ADD */
+if("add".equals(action)){
+    int id = Integer.parseInt(request.getParameter("id"));
+    String name = request.getParameter("name");
+    String email = request.getParameter("email");
+    String course = request.getParameter("course");
+
+    PreparedStatement ps = con.prepareStatement(
+    "INSERT INTO Student VALUES(?,?,?,?)");
+
+    ps.setInt(1,id);
+    ps.setString(2,name);
+    ps.setString(3,email);
+    ps.setString(4,course);
+
+    ps.executeUpdate();
+}
+
+/* UPDATE */
+if("update".equals(action)){
+    int id = Integer.parseInt(request.getParameter("id"));
+    String name = request.getParameter("name");
+    String email = request.getParameter("email");
+    String course = request.getParameter("course");
+
+    PreparedStatement ps = con.prepareStatement(
+    "UPDATE Student SET name=?,email=?,course=? WHERE id=?");
+
+    ps.setString(1,name);
+    ps.setString(2,email);
+    ps.setString(3,course);
+    ps.setInt(4,id);
+
+    ps.executeUpdate();
+}
+%>
+
+<html>
+<body>
+
+<h2>Student Management System</h2>
+
+<!-- ADD STUDENT -->
+<h3>Add Student</h3>
+
+<form method="post">
+<input type="hidden" name="action" value="add">
+
+ID: <input type="text" name="id"><br><br>
+Name: <input type="text" name="name"><br><br>
+Email: <input type="text" name="email"><br><br>
+Course: <input type="text" name="course"><br><br>
+
+<input type="submit" value="Add Student">
+</form>
+
+<hr>
+
+<!-- VIEW STUDENTS -->
+<h3>Student List</h3>
+
+<table border="1">
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Email</th>
+<th>Course</th>
+<th>Action</th>
+</tr>
+
+<%
+Statement st = con.createStatement();
+ResultSet rs = st.executeQuery("SELECT * FROM Student");
+
+while(rs.next()){
+%>
+
+<tr>
+<td><%=rs.getInt("id")%></td>
+<td><%=rs.getString("name")%></td>
+<td><%=rs.getString("email")%></td>
+<td><%=rs.getString("course")%></td>
+
+<td>
+<a href="student.jsp?action=edit&id=<%=rs.getInt("id")%>">Edit</a>
+|
+<a href="student.jsp?action=delete&id=<%=rs.getInt("id")%>">Delete</a>
+</td>
+
+</tr>
+
+<%
+}
+%>
+
+</table>
+
+<hr>
+
+<!-- EDIT STUDENT -->
+<%
+if("edit".equals(action)){
+    int id = Integer.parseInt(request.getParameter("id"));
+
+    PreparedStatement ps = con.prepareStatement(
+    "SELECT * FROM Student WHERE id=?");
+    ps.setInt(1,id);
+
+    ResultSet r = ps.executeQuery();
+    r.next();
+%>
+
+<h3>Edit Student</h3>
+
+<form method="post">
+<input type="hidden" name="action" value="update">
+
+ID: <input type="text" name="id" value="<%=r.getInt("id")%>" readonly><br><br>
+Name: <input type="text" name="name" value="<%=r.getString("name")%>"><br><br>
+Email: <input type="text" name="email" value="<%=r.getString("email")%>"><br><br>
+Course: <input type="text" name="course" value="<%=r.getString("course")%>"><br><br>
+
+<input type="submit" value="Update Student">
+</form>
+
+<%
+}
+con.close();
+%>
+
+</body>
+</html>
