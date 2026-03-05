@@ -1,0 +1,5 @@
+<form action="EmployeeServlet" method="post">
+<input type="hidden" name="action" value="delete">
+Employee ID: <input type="text" name="id"><br>
+<input type="submit" value="Delete">
+</form>
